@@ -106,6 +106,34 @@
           <button class="nav-btn" id="next-btn">Next</button>
         </div>
       </div>
+      <div
+        id="spinner"
+        style="
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 10;
+          display: none;
+        "
+      >
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <circle
+            cx="24"
+            cy="24"
+            r="20"
+            stroke="#888"
+            stroke-width="6"
+            opacity="0.2"
+          />
+          <path
+            d="M44 24a20 20 0 1 1-20-20"
+            stroke="#fff"
+            stroke-width="6"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
     </div>
     <script>
       const maps = [];
@@ -122,15 +150,23 @@
       function applyTransform() {
         mapImg.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
       }
+      function showSpinner(show) {
+        document.getElementById("spinner").style.display = show
+          ? "block"
+          : "none";
+      }
       function loadMap(index, onSuccess, onError) {
+        showSpinner(true);
         const img = new Image();
         img.src = `maps/map${index}.png`;
         img.onload = function () {
           maps[index] = img.src;
           mapImg.src = img.src;
+          showSpinner(false);
           if (onSuccess) onSuccess();
         };
         img.onerror = function () {
+          showSpinner(false);
           if (onError) onError();
         };
       }
@@ -218,13 +254,24 @@
             panY = e.touches[0].clientY - startY;
             applyTransform();
           } else if (e.touches.length === 2) {
+            const rect = mapImg.getBoundingClientRect();
+            const centerX =
+              (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+            const centerY =
+              (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
             const dist = Math.hypot(
               e.touches[0].clientX - e.touches[1].clientX,
               e.touches[0].clientY - e.touches[1].clientY
             );
             if (lastTouchDist) {
               const zoomFactor = dist / lastTouchDist;
+              const prevScale = scale;
               scale *= zoomFactor;
+              // Center zoom on pinch center
+              const imgCenterX = rect.width / 2;
+              const imgCenterY = rect.height / 2;
+              panX -= (centerX - imgCenterX) * (scale / prevScale - 1);
+              panY -= (centerY - imgCenterY) * (scale / prevScale - 1);
               lastTouchDist = dist;
               applyTransform();
             }
