@@ -52,6 +52,7 @@
         z-index: 0;
         image-rendering: crisp-edges;
         image-rendering: pixelated;
+        touch-action: none;
       }
       .controls {
         position: absolute;
@@ -77,6 +78,21 @@
       .nav-btn:hover {
         opacity: 1;
         background: #666;
+      }
+      @media (max-width: 600px) {
+        header {
+          font-size: 1.2rem;
+          min-width: 180px;
+          padding: 0.5rem;
+        }
+        .nav-btn {
+          font-size: 0.9rem;
+          padding: 0.3rem 0.7rem;
+        }
+        .controls {
+          right: 1vw;
+          bottom: 1vh;
+        }
       }
     </style>
   </head>
@@ -172,6 +188,54 @@
           },
           () => {}
         );
+      });
+
+      // Mobile touch support
+      let lastTouchDist = null;
+      mapImg.addEventListener(
+        "touchstart",
+        function (e) {
+          if (e.touches.length === 1) {
+            isPanning = true;
+            startX = e.touches[0].clientX - panX;
+            startY = e.touches[0].clientY - panY;
+            mapImg.style.cursor = "grabbing";
+          } else if (e.touches.length === 2) {
+            lastTouchDist = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+          }
+        },
+        { passive: false }
+      );
+      mapImg.addEventListener(
+        "touchmove",
+        function (e) {
+          e.preventDefault();
+          if (e.touches.length === 1 && isPanning) {
+            panX = e.touches[0].clientX - startX;
+            panY = e.touches[0].clientY - startY;
+            applyTransform();
+          } else if (e.touches.length === 2) {
+            const dist = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+            if (lastTouchDist) {
+              const zoomFactor = dist / lastTouchDist;
+              scale *= zoomFactor;
+              lastTouchDist = dist;
+              applyTransform();
+            }
+          }
+        },
+        { passive: false }
+      );
+      mapImg.addEventListener("touchend", function (e) {
+        isPanning = false;
+        lastTouchDist = null;
+        mapImg.style.cursor = "grab";
       });
 
       loadMap(currentMap);
