@@ -156,6 +156,12 @@
           : "none";
       }
       function loadMap(index, onSuccess, onError) {
+        if (maps[index]) {
+          mapImg.src = maps[index];
+          showSpinner(false);
+          if (onSuccess) onSuccess();
+          return;
+        }
         showSpinner(true);
         const img = new Image();
         img.src = `maps/map${index}.png`;
