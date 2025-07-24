@@ -246,9 +246,11 @@
       });
       prevBtn.addEventListener("click", () => {
         if (currentMap > 0) {
+          showSpinner(true);
           currentMap--;
           if (maps[currentMap]) {
             mapImg.src = maps[currentMap];
+            showSpinner(false);
           } else {
             loadMap(currentMap);
           }
@@ -260,6 +262,7 @@
       nextBtn.addEventListener("click", () => {
         const nextIndex = currentMap + 1;
         const img = new window.Image();
+        showSpinner(true);
         img.src = `maps/map${nextIndex}.png`;
         img.onload = function () {
           loadMap(
@@ -271,6 +274,7 @@
           );
         };
         img.onerror = function () {
+          showSpinner(false);
           nextBtn.classList.add("vibrate");
           setTimeout(() => nextBtn.classList.remove("vibrate"), 350);
         };
