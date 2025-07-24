@@ -112,6 +112,9 @@
           transform: translateX(0);
         }
       }
+      #spinner svg {
+        animation: spin 1s linear infinite;
+      }
       @media (max-width: 600px) {
         header {
           font-size: 1.2rem;
@@ -130,7 +133,7 @@
     </style>
   </head>
   <body>
-    <header>Satisfactory Progress v0.3</header>
+    <header>Satisfactory Progress v0.4</header>
     <div class="container">
       <img id="map-img" src="maps/map0.png" alt="Map" draggable="false" />
       <div class="controls">
