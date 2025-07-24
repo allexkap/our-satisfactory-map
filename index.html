@@ -117,23 +117,25 @@
       }
       @media (max-width: 600px) {
         header {
+          position: fixed;
+          top: 0;
+          left: 0;
           font-size: 1.2rem;
           min-width: 180px;
           padding: 0.5rem;
-        }
-        .nav-btn {
-          font-size: 0.9rem;
-          padding: 0.3rem 0.7rem;
+          z-index: 100;
         }
         .controls {
+          position: fixed;
           right: 1vw;
           bottom: 1vh;
+          z-index: 100;
         }
       }
     </style>
   </head>
   <body>
-    <header>Satisfactory Progress v0.4</header>
+    <header>Satisfactory Progress v0.5</header>
     <div class="container">
       <img id="map-img" src="maps/map0.png" alt="Map" draggable="false" />
       <div class="controls">
