@@ -79,6 +79,39 @@
         opacity: 1;
         background: #666;
       }
+      .nav-btn.vibrate {
+        animation: vibrate 0.3s linear;
+        background: #c00 !important;
+        color: #fff !important;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes vibrate {
+        0% {
+          transform: translateX(0);
+        }
+        20% {
+          transform: translateX(-4px);
+        }
+        40% {
+          transform: translateX(4px);
+        }
+        60% {
+          transform: translateX(-4px);
+        }
+        80% {
+          transform: translateX(4px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
       @media (max-width: 600px) {
         header {
           font-size: 1.2rem;
@@ -97,7 +130,7 @@
     </style>
   </head>
   <body>
-    <header>Satisfactory Progress v0.1</header>
+    <header>Satisfactory Progress v0.2</header>
     <div class="container">
       <img id="map-img" src="maps/map0.png" alt="Map" draggable="false" />
       <div class="controls">
@@ -219,17 +252,39 @@
           } else {
             loadMap(currentMap);
           }
+        } else {
+          prevBtn.classList.add("vibrate");
+          setTimeout(() => prevBtn.classList.remove("vibrate"), 350);
         }
       });
       nextBtn.addEventListener("click", () => {
         const nextIndex = currentMap + 1;
-        loadMap(
-          nextIndex,
-          () => {
-            currentMap = nextIndex;
-          },
-          () => {}
-        );
+        const img = new window.Image();
+        img.src = `maps/map${nextIndex}.png`;
+        img.onload = function () {
+          loadMap(
+            nextIndex,
+            () => {
+              currentMap = nextIndex;
+            },
+            () => {}
+          );
+        };
+        img.onerror = function () {
+          nextBtn.classList.add("vibrate");
+          setTimeout(() => nextBtn.classList.remove("vibrate"), 350);
+        };
+      });
+
+      // Arrow key controls
+      document.addEventListener("keydown", (e) => {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")
+          return;
+        if (e.key === "ArrowLeft") {
+          prevBtn.click();
+        } else if (e.key === "ArrowRight") {
+          nextBtn.click();
+        }
       });
 
       // Mobile touch support
