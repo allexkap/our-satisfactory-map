@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src='https://unpkg.com/panzoom@9.4.0/dist/panzoom.min.js'></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .layer {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
+            image-rendering: crisp-edges;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map">
+        <img class="layer" id="background" src="assets/background/game.png">
+        <img class="layer" id="fog" src="assets/fog/save0.png">
+        <img class="layer" id="map" src="assets/map/save0.png">
+    </div>
+
+    <script>
+        panzoom(document.getElementById('map'), {
+            minZoom: 1,
+            maxZoom: 100,
+        });
+    </script>
+</body>
+
+</html>
