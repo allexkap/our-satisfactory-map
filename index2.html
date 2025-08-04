@@ -8,7 +8,6 @@
         margin: 0;
         overflow: hidden;
         background-color: #222;
-        touch-action: none;
       }
 
       header {
@@ -18,7 +17,7 @@
         font-size: 2rem;
         color: #fff;
         letter-spacing: 2px;
-        
+
         border-bottom-right-radius: 16px;
         padding: 10px;
         background: #222;
@@ -35,8 +34,6 @@
         object-fit: contain;
 
         image-rendering: crisp-edges;
-
-        background: #ddd;
       }
 
       .panel {
@@ -89,8 +86,8 @@
 
   <body>
     <header>Satisfactory Progress v1.0</header>
-    <div id="map">
-      <img class="layer" id="back" src="assets/background/game.jpg" hidden />
+    <div id="scene">
+      <img class="layer" id="back" src="" hidden />
       <img class="layer" id="fog" src="assets/fog/save0.png" hidden />
       <img class="layer" id="map" src="assets/map/save0.png" />
     </div>
@@ -121,7 +118,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="group">
         <div class="title">Stage</div>
         <div class="buttons">
           <button>Prev</button>
@@ -131,12 +128,16 @@
     </div>
 
     <script>
-      panzoom(document.getElementById("map"), {
+      panzoom(document.getElementById("scene"), {
         minZoom: 1,
         maxZoom: 100,
       });
 
       const groups = document.querySelectorAll(".group");
+
+      let stage = 0;
+      let quality = "jpg";
+      let back = "";
 
       function handleButtonClick(event) {
         const clickedButton = event.target;
@@ -148,6 +149,67 @@
         buttons.forEach((btn) => btn.classList.remove("active"));
 
         clickedButton.classList.add("active");
+
+        switch (buttonGroup.parentElement.querySelector(".title").textContent) {
+          case "Map type": {
+            switch (clickedButton.textContent) {
+              case "None":
+                back = "";
+                break;
+              case "Real":
+                back = "realistic";
+                break;
+              case "Game":
+                back = "game";
+                break;
+            }
+            break;
+          }
+          case "Fog of War": {
+            const fog = document.getElementById("fog");
+            switch (clickedButton.textContent) {
+              case "Off":
+                fog.hidden = true;
+                break;
+              case "On":
+                fog.hidden = false;
+                break;
+            }
+            break;
+          }
+          case "Stage": {
+            clickedButton.classList.remove("active");
+            switch (clickedButton.textContent) {
+              case "Prev":
+                if (stage > 0) stage -= 1;
+                break;
+              case "Next":
+                if (stage < 4) stage += 1;
+                break;
+            }
+            break;
+          }
+          case "Quality": {
+            switch (clickedButton.textContent) {
+              case "Low":
+                quality = "jpg";
+                break;
+              case "High":
+                quality = "png";
+                break;
+            }
+            break;
+          }
+        }
+        let back_element = document.getElementById("back");
+        if (back != "") {
+          back_element.hidden = false;
+          back_element.src = `assets/background/${back}.${quality}`;
+        } else {
+          back_element.hidden = true;
+        }
+        document.getElementById("fog").src = `assets/fog/save${stage}.png`;
+        document.getElementById("map").src = `assets/map/save${stage}.png`;
       }
 
       groups.forEach((group) => {
