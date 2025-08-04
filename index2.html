@@ -1,12 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Satisfactory Progress</title>
     <script src="https://unpkg.com/panzoom@9.4.0/dist/panzoom.min.js"></script>
     <style>
       body {
         margin: 0;
         overflow: hidden;
         background-color: #222;
+        touch-action: none;
+      }
+
+      header {
+        position: fixed;
+        z-index: 1000;
+
+        font-size: 2rem;
+        color: #fff;
+        letter-spacing: 2px;
+        
+        border-bottom-right-radius: 16px;
+        padding: 10px;
+        background: #222;
       }
 
       .layer {
@@ -73,6 +88,7 @@
   </head>
 
   <body>
+    <header>Satisfactory Progress v1.0</header>
     <div id="map">
       <img class="layer" id="back" src="assets/background/game.jpg" hidden />
       <img class="layer" id="fog" src="assets/fog/save0.png" hidden />
