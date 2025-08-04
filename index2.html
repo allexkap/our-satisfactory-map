@@ -1,37 +1,142 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <script src='https://unpkg.com/panzoom@9.4.0/dist/panzoom.min.js'></script>
+  <head>
+    <script src="https://unpkg.com/panzoom@9.4.0/dist/panzoom.min.js"></script>
     <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
+      body {
+        margin: 0;
+        overflow: hidden;
+        background-color: #222;
+      }
 
-        .layer {
-            position: absolute;
-            width: 100vw;
-            height: 100vh;
-            object-fit: contain;
-            image-rendering: crisp-edges;
-        }
+      .layer {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, 0);
+
+        width: 100vh;
+        height: 100vh;
+        object-fit: contain;
+
+        image-rendering: crisp-edges;
+
+        background: #ddd;
+      }
+
+      .panel {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 1000;
+        width: 200px;
+
+        border-radius: 12px;
+        padding: 10px;
+        background: #222;
+      }
+
+      .group {
+        margin-bottom: 15px;
+      }
+
+      .title {
+        text-align: center;
+        color: #fff;
+        font-weight: bold;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 6px;
+      }
+
+      button {
+        flex: 1;
+        padding: 5px;
+        border: solid transparent;
+        background: #444;
+        color: #fff;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .active {
+        border-color: #5c84b9;
+      }
+
+      button:hover {
+        background: #666;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="map">
-        <img class="layer" id="background" src="assets/background/game.jpg">
-        <img class="layer" id="fog" src="assets/fog/save0.png">
-        <img class="layer" id="map" src="assets/map/save0.png">
+      <img class="layer" id="back" src="assets/background/game.jpg" hidden />
+      <img class="layer" id="fog" src="assets/fog/save0.png" hidden />
+      <img class="layer" id="map" src="assets/map/save0.png" />
+    </div>
+
+    <div class="panel">
+      <div class="group">
+        <div class="title">Quality</div>
+        <div class="buttons">
+          <button class="active">Low</button>
+          <button>High</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="title">Fog of War</div>
+        <div class="buttons">
+          <button class="active">Off</button>
+          <button>On</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="title">Map type</div>
+        <div class="buttons">
+          <button class="active">None</button>
+          <button>Real</button>
+          <button>Game</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="title">Stage</div>
+        <div class="buttons">
+          <button>Prev</button>
+          <button>Next</button>
+        </div>
+      </div>
     </div>
 
     <script>
-        panzoom(document.getElementById('map'), {
-            minZoom: 1,
-            maxZoom: 100,
-        });
-    </script>
-</body>
+      panzoom(document.getElementById("map"), {
+        minZoom: 1,
+        maxZoom: 100,
+      });
 
+      const groups = document.querySelectorAll(".group");
+
+      function handleButtonClick(event) {
+        const clickedButton = event.target;
+        if (clickedButton.tagName !== "BUTTON") return;
+
+        const buttonGroup = clickedButton.parentElement;
+        const buttons = buttonGroup.querySelectorAll("button");
+
+        buttons.forEach((btn) => btn.classList.remove("active"));
+
+        clickedButton.classList.add("active");
+      }
+
+      groups.forEach((group) => {
+        group.addEventListener("click", handleButtonClick);
+      });
+    </script>
+  </body>
 </html>
