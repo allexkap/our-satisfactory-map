@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-# Auto-increment minor version in index.html before commit
-set -e
-HTML="index.html"
-MINOR=$(grep -oP 'Satisfactory Progress v[0-9]+\.\K[0-9]+' "$HTML" | head -1)
-if [ -z "$MINOR" ]; then MINOR=0; fi
-NEW_MINOR=$((MINOR + 1))
-sed -i -E "s/(Satisfactory Progress v[0-9]+\.)([0-9]+)/\1$NEW_MINOR/" "$HTML"
-git add "$HTML"
