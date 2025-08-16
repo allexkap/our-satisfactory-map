@@ -88,8 +88,8 @@
     <header>Satisfactory Progress v0.9</header>
     <div id="scene">
       <img class="layer" id="back" src="" hidden />
-      <img class="layer" id="fog" src="assets/fog/save0.png" hidden />
-      <img class="layer" id="map" src="assets/map/save0.png" />
+      <img class="layer" id="fog" src="assets/fog/save7.png" hidden />
+      <img class="layer" id="map" src="assets/map/save7.png" />
     </div>
 
     <div class="panel">
@@ -135,7 +135,7 @@
 
       const groups = document.querySelectorAll(".group");
 
-      let stage = 0;
+      let stage = 7;
       let quality = "jpg";
       let back = "";
 
@@ -184,7 +184,7 @@
                 if (stage > 0) stage -= 1;
                 break;
               case "Next":
-                if (stage < 6) stage += 1;
+                if (stage < 7) stage += 1;
                 break;
             }
             break;
